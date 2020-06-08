@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Line {
 
-  private final String text;
+  protected final String text;
 
   public static Line parse( final String text ) {
     if ( text.startsWith( "#" ) ) {

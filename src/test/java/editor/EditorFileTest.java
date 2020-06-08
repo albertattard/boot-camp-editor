@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,9 +25,7 @@ public class EditorFileTest {
       EditorFile.parse( getClass().getResourceAsStream( "/samples/all-headers.md" ), StandardCharsets.UTF_8 );
 
     final List<HeaderLine> headers =
-      Stream.of( "# H1 header", "## H2 header", "### H3 header", "#### H4 header", "##### H5 header" ).map(
-        HeaderLine::new ).collect(
-        Collectors.toList() );
+      HeaderLine.of( "# H1 header", "## H2 header", "### H3 header", "#### H4 header", "##### H5 header" );
     assertEquals( headers, target.headers() );
   }
 }
