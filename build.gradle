@@ -1,0 +1,33 @@
+plugins {
+  id 'java'
+  id 'application'
+
+  id 'com.dorongold.task-tree' version '1.5'
+  id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_14
+  targetCompatibility = JavaVersion.VERSION_14
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  implementation 'com.google.guava:guava:29.0-jre'
+  implementation 'org.apache.commons:commons-lang3:3.10'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+}
+
+application {
+  mainClassName = 'demo.App'
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
+  }
+}

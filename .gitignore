@@ -1,0 +1,12 @@
+# Folders
+.gradle
+.idea
+.settings
+.vscode
+bin
+build
+
+# Files
+.classpath
+.project
+x_init
