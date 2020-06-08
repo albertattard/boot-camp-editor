@@ -24,4 +24,11 @@ public class EditorFile {
   public int numberOfLines() {
     return lines.size();
   }
+
+  public List<HeaderLine> headers() {
+    return lines.stream()
+      .filter( line -> line instanceof HeaderLine )
+      .map( line -> (HeaderLine) line )
+      .collect( Collectors.toList() );
+  }
 }

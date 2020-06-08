@@ -1,14 +1,19 @@
 package editor;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class Line {
 
   private final String text;
 
-  public Line( final String text ) {
-    this.text = text;
-  }
-
   public static Line parse( final String text ) {
+    if ( text.startsWith( "#" ) ) {
+      return new HeaderLine( text );
+    }
+
     return new Line( text );
   }
 }
