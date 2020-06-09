@@ -37,7 +37,11 @@ dependencies {
 }
 
 application {
-  mainClassName = 'demo.App'
+  mainClassName = 'editor.App'
+}
+
+shadowJar {
+  archiveFileName = "application.jar"
 }
 
 test {
