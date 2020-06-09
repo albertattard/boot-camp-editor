@@ -6,7 +6,7 @@ public class IncludeCommandLineParser implements LineParser<IncludeCommandLine> 
 
   @Override
   public IncludeCommandLine parse( final String line ) {
-    return new IncludeCommandLine( line );
+    return IncludeCommandLine.of( line );
   }
 
   @Override

@@ -28,7 +28,7 @@ public class IncludeCommandLineTest {
     when( context.findMetadata( eq( "something" ) ) ).thenReturn( Optional.of( metadataFile ) );
     when( metadataFile.readEditorFile() ).thenReturn( new EditorFile( source ) );
 
-    final IncludeCommandLine subject = new IncludeCommandLine( "  {include(\"something\")}" );
+    final IncludeCommandLine subject = IncludeCommandLine.of( "  {include(\"something\")}" );
     assertEquals( 2, subject.getIndentation() );
     final List<Line> actual = subject.resolve( context )
       .collect( Collectors.toList() );

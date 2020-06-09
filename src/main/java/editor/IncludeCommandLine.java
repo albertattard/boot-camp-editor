@@ -12,9 +12,9 @@ public class IncludeCommandLine extends TextLine {
 
   private final String include;
 
-  public IncludeCommandLine( final String text ) {
+  private IncludeCommandLine( final String text, final String include ) {
     super( text );
-    this.include = parseInclude( text );
+    this.include = include;
   }
 
   @Override
@@ -34,7 +34,12 @@ public class IncludeCommandLine extends TextLine {
 
   @Override
   public IncludeCommandLine copyFromIndentedText( final String indentedText ) {
-    return new IncludeCommandLine( indentedText );
+    return new IncludeCommandLine( indentedText, include );
+  }
+
+  public static IncludeCommandLine of( final String text ) {
+    final String include = parseInclude( text );
+    return new IncludeCommandLine( text, include );
   }
 
   @Override
