@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProjectTest {
 
   @Test
-  @DisplayName( "should scan one directory and find all metadata files" )
+  @DisplayName( "should resolve files and include one other file" )
   public void shouldParseMetadataFiles() throws Exception {
     final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -29,17 +29,14 @@ public class ProjectTest {
       .setEntryPoint( "host-example" )
       .build();
 
-    final List<String> expected =
-      Files.readAllLines( samples.resolve( "builds/host-file.md" ), StandardCharsets.UTF_8 );
+    final List<String> expected = Files.readAllLines( samples.resolve( "builds/host-file.md" ), StandardCharsets.UTF_8 );
 
     final String text = new String( output.toByteArray(), StandardCharsets.UTF_8 );
-    final List<String> actual =
-      Arrays.asList( text.split( "\\n" ) );
+    final List<String> actual = Arrays.asList( text.split( "\\n" ) );
 
     assertEquals( expected.size(), actual.size() );
     for ( int i = 0, lineNumber = 1, size = expected.size(); i < size; i++, lineNumber++ ) {
-      assertEquals( expected.get( i ), actual.get( i ),
-        String.format( "[%s] expected '%s' but found '%s'", lineNumber, expected.get( i ), actual.get( i ) ) );
+      assertEquals( expected.get( i ), actual.get( i ), String.format( "Found differences on line %d", lineNumber ) );
     }
   }
 }

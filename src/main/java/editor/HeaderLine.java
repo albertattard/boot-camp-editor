@@ -45,6 +45,11 @@ public class HeaderLine extends TextLine {
   }
 
   @Override
+  protected HeaderLine copyFromIndentedText( final String indentedText ) {
+    throw new UnsupportedOperationException( "Cannot indent headers" );
+  }
+
+  @Override
   public String toString() {
     return String.format( "HeaderLine{text=%s, indentation=%d, caption=%s}", text, indentation, caption );
   }

@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Getter
@@ -32,6 +33,25 @@ public class TextLine implements Line {
     } catch ( final IOException e ) {
       throw new RuntimeException( "Failed to write line", e );
     }
+  }
+
+  @Override
+  public TextLine indentBy( final int indentation ) {
+    if ( indentation == 0 ) {
+      return this;
+    }
+
+    return copyFromIndentedText( indentTextBy( text, indentation ) );
+  }
+
+  protected TextLine copyFromIndentedText( final String indentedText ) {
+    return new TextLine( indentedText );
+  }
+
+  private static String indentTextBy( final String text, final int indentation ) {
+    final char[] padding = new char[indentation];
+    Arrays.fill( padding, ' ' );
+    return String.format( "%s%s", new String( padding ), text );
   }
 
   private static int calculateIndentation( final String text ) {

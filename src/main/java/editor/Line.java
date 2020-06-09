@@ -8,4 +8,6 @@ public interface Line {
   Stream<Line> resolve( final Context context );
 
   void writeTo( final Writer writer );
+
+  Line indentBy( final int indentation ) throws UnsupportedOperationException;
 }

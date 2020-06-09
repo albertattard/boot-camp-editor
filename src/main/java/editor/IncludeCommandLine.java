@@ -23,12 +23,18 @@ public class IncludeCommandLine extends TextLine {
       .orElseThrow( () -> new RuntimeException( String.format( "Missing dependency %s", include ) ) )
       .readEditorFile()
       .resolve( context )
-      .stream();
+      .stream()
+      .map( line -> line.indentBy( getIndentation() ) );
   }
 
   private static String parseInclude( final String text ) {
     final String[] parts = text.split( "[\\(\\)]" );
     return StringUtils.substringBetween( parts[1], "\"" );
+  }
+
+  @Override
+  public IncludeCommandLine copyFromIndentedText( final String indentedText ) {
+    return new IncludeCommandLine( indentedText );
   }
 
   @Override

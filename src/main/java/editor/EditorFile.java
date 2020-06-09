@@ -15,7 +15,7 @@ public class EditorFile {
 
   private final List<Line> lines;
 
-  public EditorFile( final List<Line> lines ) {
+  public EditorFile( final List<? extends Line> lines ) {
     this.lines = Collections.unmodifiableList( new ArrayList<>( lines ) );
   }
 
