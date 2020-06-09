@@ -1,4 +1,5 @@
-Line,Include,Indentation
+Line,Include,Header Offset
 {include("some-file-01")},some-file-01,0
-"  {include(""some-file-02"")}",some-file-02,2
-"  {include(""some-file-03"")}  ",some-file-03,2
+"{include(""some-file-02"", 4)}",some-file-02,4
+"  {include(""some-file-03"")}",some-file-03,0
+"  {include(""some-file-04"")}  ",some-file-04,0
