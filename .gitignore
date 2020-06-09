@@ -5,6 +5,7 @@
 .vscode
 bin
 build
+out
 
 # Files
 .classpath

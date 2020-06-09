@@ -1,13 +1,26 @@
 package editor;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@EqualsAndHashCode
 public class HeaderLine extends TextLine {
+
+  protected final String caption;
 
   public HeaderLine( final String text ) {
     super( text );
+    this.caption = parseCaption( text );
+  }
+
+  private static String parseCaption( final String text ) {
+    final String[] parts = text.split( "\\s+", 2 );
+    return parts[1];
   }
 
   public static List<HeaderLine> of( final String... headers ) {
@@ -17,11 +30,9 @@ public class HeaderLine extends TextLine {
   }
 
   public HeaderLink toLink( final String caption ) {
-    final String[] parts = text.split( "\\s+", 2 );
-
     final String link =
-      /* TODO: not all cases are properly captured */
-      parts[1].toLowerCase()
+      caption.toLowerCase()
+        /* TODO: not all cases are properly captured */
         .replaceAll( "[/'`]", "" )
         .replaceAll( "[^\\p{IsAlphabetic}\\p{IsDigit}]+", "-" )
         .replaceAll( "-+", "-" )
@@ -30,4 +41,8 @@ public class HeaderLine extends TextLine {
     return new HeaderLink( caption, link );
   }
 
+  @Override
+  public String toString() {
+    return String.format( "HeaderLine{text=%s, indentation=%d, caption=%s}", text, indentation, caption );
+  }
 }

@@ -1,0 +1,4 @@
+Line,Include,Indentation
+{include("some-file-01")},some-file-01,0
+"  {include(""some-file-02"")}",some-file-02,2
+"  {include(""some-file-03"")}  ",some-file-03,2

@@ -9,7 +9,7 @@ public class LineParsers {
     Objects.requireNonNull( line );
 
     return parsers.stream()
-      .filter( p -> p.match( line ) )
+      .filter( parser -> parser.match( line ) )
       .findFirst()
       .orElseThrow( () -> new IllegalArgumentException( "Cannot parse line " + line ) )
       .parse( line );
@@ -17,6 +17,7 @@ public class LineParsers {
 
   private static final List<LineParser<?>> parsers = List.of(
     HeaderLineParser.instance(),
+    IncludeCommandLineParser.instance(),
     TextLineParser.instance()
   );
 
