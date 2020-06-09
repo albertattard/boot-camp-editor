@@ -1,31 +1,34 @@
 package editor;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Stream;
 
-@EqualsAndHashCode
+@Getter
+@EqualsAndHashCode( callSuper = true )
 public class IncludeCommandLine extends TextLine {
 
   private final String include;
 
-  public IncludeCommandLine( final String text, final String include ) {
+  public IncludeCommandLine( final String text ) {
     super( text );
-    this.include = include;
+    this.include = parseInclude( text );
   }
 
   @Override
-  public Stream<Line> resolve( final Metadata metadata ) {
-    System.out.println( "Child" );
-    return metadata.find( include )
+  public Stream<Line> resolve( final Context context ) {
+    return context.findMetadata( include )
       .orElseThrow( () -> new RuntimeException( String.format( "Missing dependency %s", include ) ) )
       .readEditorFile()
-      .resolve( metadata )
+      .resolve( context )
       .stream();
   }
 
-  public String getInclude() {
-    return include;
+  private static String parseInclude( final String text ) {
+    final String[] parts = text.split( "[\\(\\)]" );
+    return StringUtils.substringBetween( parts[1], "\"" );
   }
 
   @Override

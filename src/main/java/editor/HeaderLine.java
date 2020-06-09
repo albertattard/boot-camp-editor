@@ -1,5 +1,6 @@
 package editor;
 
+import com.google.common.base.Preconditions;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -8,10 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode( callSuper = true )
 public class HeaderLine extends TextLine {
 
-  protected final String caption;
+  private final String caption;
 
   public HeaderLine( final String text ) {
     super( text );
@@ -30,8 +31,10 @@ public class HeaderLine extends TextLine {
   }
 
   public HeaderLink toLink( final String caption ) {
+    Preconditions.checkNotNull( caption );
+
     final String link =
-      caption.toLowerCase()
+      this.caption.toLowerCase()
         /* TODO: not all cases are properly captured */
         .replaceAll( "[/'`]", "" )
         .replaceAll( "[^\\p{IsAlphabetic}\\p{IsDigit}]+", "-" )

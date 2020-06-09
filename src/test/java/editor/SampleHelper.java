@@ -2,7 +2,6 @@ package editor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
@@ -15,12 +14,8 @@ public class SampleHelper {
   }
 
   public static EditorFile readEditorFile( final String fileName ) {
-    return readFile( fileName, EditorFileParser::parse );
-  }
-
-  public static <T> T readFile( final String fileName, FileFunction<T> block ) {
     try ( final InputStream inputStream = fileAsInputStream( fileName ) ) {
-      return block.apply( inputStream, StandardCharsets.UTF_8 );
+      return EditorFileParser.parse( inputStream, StandardCharsets.UTF_8 );
     } catch ( IOException e ) {
       throw new RuntimeException( "Failed to read file", e );
     }
@@ -31,10 +26,6 @@ public class SampleHelper {
       .getResourceAsStream( String.format( "/samples/files/%s", fileName ) );
     assertNotNull( inputStream, String.format( "Failed to open file %s", fileName ) );
     return inputStream;
-  }
-
-  private interface FileFunction<T> {
-    T apply( final InputStream inputStream, final Charset charset );
   }
 
   private SampleHelper() {

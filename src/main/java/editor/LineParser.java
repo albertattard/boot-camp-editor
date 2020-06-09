@@ -2,7 +2,7 @@ package editor;
 
 public interface LineParser<T extends Line> {
 
-  T parse( String line );
+  boolean match( final String line );
 
-  boolean match( String line );
+  T parse( final String line );
 }

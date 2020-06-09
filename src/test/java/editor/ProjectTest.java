@@ -33,10 +33,6 @@ public class ProjectTest {
       Files.readAllLines( samples.resolve( "builds/host-file.md" ), StandardCharsets.UTF_8 );
 
     final String text = new String( output.toByteArray(), StandardCharsets.UTF_8 );
-    System.out.println( "--------------------" );
-    System.out.println( text );
-    System.out.println( "--------------------" );
-
     final List<String> actual =
       Arrays.asList( text.split( "\\n" ) );
 

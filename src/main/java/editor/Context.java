@@ -3,30 +3,35 @@ package editor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Metadata {
+public class Context {
 
   private final Map<String, MetadataFile> metadataByName;
 
-  public Metadata( final Map<String, MetadataFile> metadataByName ) {
+  private Context( final Map<String, MetadataFile> metadataByName ) {
     this.metadataByName = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
     this.metadataByName.putAll( metadataByName );
   }
 
-  public static Metadata scan( final List<Path> directories ) {
-    final var metadataByName = directories.stream()
-      .flatMap( Metadata::list )
-      .filter( Metadata::filter )
-      .map( MetadataFileParser::parse )
-      .collect( Collectors.toMap( MetadataFile::getName, a -> a ) );
+  public static Context scan( final Collection<Path> directories ) {
+    final Map<String, MetadataFile> metadataByName =
+      directories.stream()
+        .flatMap( Context::list )
+        .filter( Context::filter )
+        .map( MetadataFileParser::parse )
+        .collect( Collectors.toMap( MetadataFile::getName, a -> a ) );
 
-    return new Metadata( metadataByName );
+    return new Context( metadataByName );
+  }
+
+  public Optional<MetadataFile> findMetadata( final String name ) {
+    return Optional.ofNullable( metadataByName.get( name ) );
   }
 
   private static boolean filter( final Path path ) {
@@ -42,12 +47,8 @@ public class Metadata {
     }
   }
 
-  public Optional<MetadataFile> find( final String name ) {
-    return Optional.ofNullable( metadataByName.get( name ) );
-  }
-
   @Override
   public String toString() {
-    return String.format( "Metadata{metadataByName=%s}", metadataByName );
+    return String.format( "Context{metadataByName=%s}", metadataByName );
   }
 }

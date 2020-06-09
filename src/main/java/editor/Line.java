@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public interface Line {
 
-  Stream<Line> resolve( Metadata metadata );
+  Stream<Line> resolve( final Context context );
 
-  void writeTo( Writer writer );
+  void writeTo( final Writer writer );
 }

@@ -12,8 +12,8 @@ public class LineParsersTest {
   @DisplayName( "should parse the line as an include command line" )
   public void shouldParseToIncludeCommand() {
     final String text = "{include(\"some-file\")}";
-    final Line target = LineParsers.parse( text );
-    assertTrue( target instanceof IncludeCommandLine,
+    final Line subject = LineParsers.parse( text );
+    assertTrue( subject instanceof IncludeCommandLine,
       String.format( "The line '%s' should be treated as an include command", text ) );
   }
 }

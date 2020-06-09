@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class MetadataFileParser {
 
@@ -22,16 +21,17 @@ public class MetadataFileParser {
       mapper.setPropertyNamingStrategy( PropertyNamingStrategy.KEBAB_CASE );
       final MetadataFile metadata = mapper.readValue( Files.readString( file, StandardCharsets.UTF_8 ), MetadataFile.class );
 
-      Objects.requireNonNull( metadata, "Failed to parse object from stream" );
+      Preconditions.checkNotNull( metadata, "Failed to parse object from file %s", file );
 
       if ( metadata.getEditorFile() == null ) {
         metadata.setEditorFile( toEditorFile( file ) );
       }
 
       metadata.setMetadataFile( file );
+
       return metadata;
     } catch ( IOException e ) {
-      throw new RuntimeException( "Failed to parse stream", e );
+      throw new RuntimeException( String.format( "Failed to parse file %s", file ), e );
     }
   }
 

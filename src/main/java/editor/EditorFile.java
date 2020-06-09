@@ -30,10 +30,10 @@ public class EditorFile {
       .collect( Collectors.toList() );
   }
 
-  public EditorFile resolve( final Metadata metadata ) {
+  public EditorFile resolve( final Context context ) {
     final List<Line> resolved = lines
       .stream()
-      .flatMap( line -> line.resolve( metadata ) )
+      .flatMap( line -> line.resolve( context ) )
       .collect( Collectors.toList() );
     return new EditorFile( resolved );
   }

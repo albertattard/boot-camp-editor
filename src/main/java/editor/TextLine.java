@@ -20,7 +20,7 @@ public class TextLine implements Line {
   }
 
   @Override
-  public Stream<Line> resolve( final Metadata metadata ) {
+  public Stream<Line> resolve( final Context context ) {
     return Stream.of( this );
   }
 

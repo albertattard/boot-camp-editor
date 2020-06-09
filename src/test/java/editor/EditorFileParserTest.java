@@ -14,17 +14,17 @@ public class EditorFileParserTest {
   @Test
   @DisplayName( "should parse file" )
   public void shouldParseFile() {
-    final EditorFile target = readEditorFile( "basic.md" );
-    assertEquals( 3, target.numberOfLines() );
+    final EditorFile subject = readEditorFile( "basic.md" );
+    assertEquals( 3, subject.numberOfLines() );
   }
 
   @Test
   @DisplayName( "should return the headers" )
   public void shouldReturnHeaders() {
-    final EditorFile target = readEditorFile( "all-headers.md" );
+    final EditorFile subject = readEditorFile( "all-headers.md" );
 
     final List<HeaderLine> headers =
       HeaderLine.of( "# H1 header", "## H2 header", "### H3 header", "#### H4 header", "##### H5 header" );
-    assertEquals( headers, target.headers() );
+    assertEquals( headers, subject.headers() );
   }
 }

@@ -26,4 +26,9 @@ public class MetadataFile {
   private Path getEditorFilePath() {
     return metadataFile.getParent().resolve( editorFile );
   }
+
+  @Override
+  public String toString() {
+    return String.format( "MetadataFile{name=%s, editorFile=%S, metadataFile=%s}", name, editorFile, metadataFile );
+  }
 }

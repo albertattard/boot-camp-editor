@@ -1,16 +1,12 @@
 package editor;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.regex.Pattern;
 
 public class IncludeCommandLineParser implements LineParser<IncludeCommandLine> {
 
   @Override
   public IncludeCommandLine parse( final String line ) {
-    final String[] parts = line.split( "[\\(\\)]" );
-    final String include = StringUtils.substringBetween( parts[1], "\"" );
-    return new IncludeCommandLine( line, include );
+    return new IncludeCommandLine( line );
   }
 
   @Override

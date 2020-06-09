@@ -15,9 +15,9 @@ public class IncludeCommandLineParserTest {
   public void shouldCreateCommand( final String line, final String include, final int indentation ) {
     assertTrue( parser.match( line ), String.format( "The line %s is a valid include command", line ) );
 
-    final IncludeCommandLine commandLine = parser.parse( line );
-    assertEquals( include, commandLine.getInclude() );
-    assertEquals( indentation, commandLine.getIndentation() );
+    final IncludeCommandLine subject = parser.parse( line );
+    assertEquals( include, subject.getInclude() );
+    assertEquals( indentation, subject.getIndentation() );
   }
 
   private final LineParser<IncludeCommandLine> parser = IncludeCommandLineParser.instance();
