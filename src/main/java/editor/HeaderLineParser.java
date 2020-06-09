@@ -4,7 +4,7 @@ public class HeaderLineParser implements LineParser<HeaderLine> {
 
   @Override
   public HeaderLine parse( final String line ) {
-    return new HeaderLine( line );
+    return HeaderLine.of( line );
   }
 
   @Override
