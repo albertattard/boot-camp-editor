@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HeaderLine extends Line {
+public class HeaderLine extends TextLine {
 
   public HeaderLine( final String text ) {
     super( text );
@@ -29,4 +29,5 @@ public class HeaderLine extends Line {
 
     return new HeaderLink( caption, link );
   }
+
 }
