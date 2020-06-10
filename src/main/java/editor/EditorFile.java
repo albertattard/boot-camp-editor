@@ -23,6 +23,12 @@ public class EditorFile {
     final List<Line> resolved = stream()
       .flatMap( line -> line.resolve( context ) )
       .collect( Collectors.toList() );
+
+    /* Do not create a new editor file if the contents have not changed */
+    if ( resolved.equals( lines ) ) {
+      return this;
+    }
+
     return new EditorFile( resolved );
   }
 

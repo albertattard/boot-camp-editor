@@ -47,12 +47,8 @@ public class Project {
     Preconditions.checkNotNull( charset, "Charset is not set" );
     Preconditions.checkArgument( !directories.isEmpty(), "No directories were added to scan" );
 
-    Context context = Context.of( entryPoint, directories );
-
-    while ( context.containsType( NeedsToBeResolved.class ) ) {
-      context = context.resolve();
-    }
-
-    context.writeTo( output, charset );
+    Context.of( entryPoint, directories )
+      .resolve()
+      .writeTo( output, charset );
   }
 }

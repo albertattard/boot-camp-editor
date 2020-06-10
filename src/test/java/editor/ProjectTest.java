@@ -26,7 +26,7 @@ public class ProjectTest {
     new Project()
       .addDirectory( samples.resolve( "files" ) )
       .setOutput( output, StandardCharsets.UTF_8 )
-      .setEntryPoint( "host-example" )
+      .setEntryPoint( "HOST-EXAMPLE" )
       .build();
 
     final List<String> expected = Files.readAllLines( samples.resolve( "builds/host-file.md" ), StandardCharsets.UTF_8 );

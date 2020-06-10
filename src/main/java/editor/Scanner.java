@@ -14,11 +14,16 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.collectingAndThen;
 
 public class Scanner {
 
   public static Map<String, MetadataFile> scan( final Collection<Path> directories ) {
+    checkNotNull( directories );
+    checkArgument( !directories.isEmpty(), "No directories provided" );
+
     return
       directories.stream()
         .flatMap( Scanner::walk )
