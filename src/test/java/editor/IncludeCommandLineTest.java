@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 @DisplayName( "Include command line" )
 public class IncludeCommandLineTest {
 
+  @DisplayName( "should create include command line" )
   @CsvFileSource( resources = "/samples/data/include_command.csv", numLinesToSkip = 1 )
   @ParameterizedTest( name = "should create command for line {0} with include {1} and headerOffset of {2}" )
   public void shouldCreateCommand( final String line, final String include, final int headerOffset ) {
