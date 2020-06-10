@@ -87,6 +87,10 @@ public class Context {
     return new Context( new EditorFile( resolved ), metadataByName );
   }
 
+  public Stream<Line> stream() {
+    return file.stream();
+  }
+
   public void writeTo( final OutputStream output, final Charset charset ) {
     file.writeTo( output, charset );
   }

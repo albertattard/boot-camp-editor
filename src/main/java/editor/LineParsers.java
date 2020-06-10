@@ -17,6 +17,7 @@ public class LineParsers {
 
   private static final List<LineParser<?>> PARSERS = List.of(
     HeaderLineParser.instance(),
+    TocCommandLineParser.instance(),
     IncludeCommandLineParser.instance(),
     TextLineParser.instance()
   );

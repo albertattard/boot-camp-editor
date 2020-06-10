@@ -3,6 +3,8 @@ package editor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.io.Writer;
+
 @Getter
 @EqualsAndHashCode
 public abstract class CommandLine implements Line, NeedsToBeResolved {
@@ -11,6 +13,11 @@ public abstract class CommandLine implements Line, NeedsToBeResolved {
 
   protected CommandLine( final int indentation ) {
     this.indentation = indentation;
+  }
+
+  @Override
+  public void writeTo( final Writer writer ) {
+    throw new UnsupportedOperationException();
   }
 
   @Override

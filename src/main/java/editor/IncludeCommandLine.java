@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Writer;
 import java.util.stream.Stream;
 
 import static editor.Line.calculateIndentation;
@@ -34,11 +33,7 @@ public class IncludeCommandLine extends CommandLine {
   }
 
   @Override
-  public void writeTo( final Writer writer ) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override public Line indentBy( final int indentation ) throws UnsupportedOperationException {
+  public IncludeCommandLine indentBy( final int indentation ) {
     return new IncludeCommandLine( this.indentation + indentation, include, headerOffset );
   }
 

@@ -21,7 +21,7 @@ public class HeaderLine extends TextLine {
     this.caption = caption;
   }
 
-  public HeaderLink toLink( final String caption ) {
+  public Link toLink( final String caption ) {
     Preconditions.checkNotNull( caption );
 
     final String link =
@@ -32,7 +32,7 @@ public class HeaderLine extends TextLine {
         .replaceAll( "-+", "-" )
         .replaceAll( "-$", "" );
 
-    return new HeaderLink( caption, link );
+    return new Link( caption, link );
   }
 
   @Override

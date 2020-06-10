@@ -1,6 +1,7 @@
 package editor;
 
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public interface Line {
@@ -19,5 +20,11 @@ public interface Line {
     }
 
     return text.length();
+  }
+
+  static String padWith( final char pad, final int size ) {
+    final char[] padding = new char[size];
+    Arrays.fill( padding, pad );
+    return new String( padding );
   }
 }

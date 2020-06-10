@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class HeaderLink {
+public class Link {
 
   private final String caption;
   private final String link;
 
   @Override
   public String toString() {
-    return String.format( "HeaderLink{caption=%s, link=%s}", caption, link );
+    return String.format( "Link{caption=%s, link=%s}", caption, link );
   }
 }

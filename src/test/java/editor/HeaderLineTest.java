@@ -20,9 +20,9 @@ public class HeaderLineTest {
   @DisplayName( "should create header link" )
   public void shouldCreateHeaderLink() {
     final HeaderLine subject = HeaderLine.of( "# A simple header" );
-    final HeaderLink actual = subject.toLink( "caption" );
+    final Link actual = subject.toLink( "caption" );
 
-    final HeaderLink expected = new HeaderLink( "caption", "a-simple-header" );
+    final Link expected = new Link( "caption", "a-simple-header" );
     assertEquals( expected, actual );
   }
 
