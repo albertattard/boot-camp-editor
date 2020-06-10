@@ -9,11 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Context {
@@ -21,22 +19,8 @@ public class Context {
   private final Map<String, MetadataFile> metadataByName;
   private final EditorFile file;
 
-  private Context( final EditorFile file, final Map<String, MetadataFile> metadataByName ) {
-    Preconditions.checkNotNull( file );
-    Preconditions.checkNotNull( metadataByName );
-
-    this.file = file;
-    this.metadataByName = createMapWith( metadataByName );
-  }
-
   public static Context scan( final Collection<Path> directories ) {
-    final Map<String, MetadataFile> metadataByName =
-      directories.stream()
-        .flatMap( Context::walk )
-        .filter( Context::filter )
-        .map( MetadataFileParser::parse )
-        .collect( Collectors.toMap( MetadataFile::getName, a -> a ) );
-
+    final Map<String, MetadataFile> metadataByName = Scanner.scan( directories );
     return new Context( EditorFile.empty(), metadataByName );
   }
 
@@ -52,23 +36,7 @@ public class Context {
   }
 
   public boolean containsType( final Class<?> type ) {
-    return file
-      .stream()
-      .map( Line::getClass )
-      .anyMatch( type::isAssignableFrom );
-  }
-
-  private static boolean filter( final Path path ) {
-    return Files.isRegularFile( path ) && path.getFileName().toString().endsWith( ".json" );
-  }
-
-  private static Stream<Path> walk( final Path path ) {
-    try {
-      return Files.walk( path );
-    } catch ( final IOException e ) {
-      final String message = String.format( "Failed to list files under %s", path );
-      throw new RuntimeException( message, e );
-    }
+    return file.containsType( type );
   }
 
   private static Map<String, MetadataFile> createMapWith( final Map<String, MetadataFile> metadataByName ) {
@@ -83,8 +51,7 @@ public class Context {
   }
 
   public Context resolve() {
-    final List<Line> resolved = file.stream().flatMap( line -> line.resolve( this ) ).collect( Collectors.toList() );
-    return new Context( new EditorFile( resolved ), metadataByName );
+    return new Context( file.resolve( this ), metadataByName );
   }
 
   public Stream<Line> stream() {
@@ -94,4 +61,14 @@ public class Context {
   public void writeTo( final OutputStream output, final Charset charset ) {
     file.writeTo( output, charset );
   }
+
+
+  private Context( final EditorFile file, final Map<String, MetadataFile> metadataByName ) {
+    Preconditions.checkNotNull( file );
+    Preconditions.checkNotNull( metadataByName );
+
+    this.file = file;
+    this.metadataByName = createMapWith( metadataByName );
+  }
+
 }

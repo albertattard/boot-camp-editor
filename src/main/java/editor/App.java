@@ -15,8 +15,7 @@ import java.util.function.Function;
 public class App {
 
   public static void main( final String[] args ) throws Exception {
-    final String entryPoint =
-      first( args, "-e", e -> e ).orElseThrow( () -> new IllegalArgumentException( "Missing entry point" ) );
+    final String entryPoint = entryPointOrFail( args );
 
     try ( final OutputStream outputStream = outputStream( args ) ) {
       final Project project = new Project();
@@ -27,14 +26,19 @@ public class App {
     }
   }
 
+  private static String entryPointOrFail( final String[] args ) {
+    return firstArg( args, "-e", a -> a )
+      .orElseThrow( () -> new IllegalArgumentException( "Missing entry point -e" ) );
+  }
+
   private static List<Path> directories( final String[] args ) {
-    final List<Path> directories = list( args, "-d", Paths::get );
+    final List<Path> directories = allArgs( args, "-d", Paths::get );
     return directories.isEmpty() ? List.of( Paths.get( "." ) ) : directories;
   }
 
   private static OutputStream outputStream( final String[] args ) {
     return newOutputStream(
-      first( args, "-o", Paths::get )
+      firstArg( args, "-o", Paths::get )
         .orElse( Paths.get( "output.md" ) )
     );
   }
@@ -48,7 +52,7 @@ public class App {
     }
   }
 
-  private static <T> Optional<T> first( final String[] args, final String flag, final Function<String, T> converter ) {
+  private static <T> Optional<T> firstArg( final String[] args, final String flag, final Function<String, T> converter ) {
     for ( int i = 0, limit = args.length - 1; i < limit; i++ ) {
       final String arg = args[i];
       if ( flag.equals( arg ) ) {
@@ -58,7 +62,7 @@ public class App {
     return Optional.empty();
   }
 
-  private static <T> List<T> list( final String[] args, final String flag, final Function<String, T> converter ) {
+  private static <T> List<T> allArgs( final String[] args, final String flag, final Function<String, T> converter ) {
     final List<T> parameters = new ArrayList<>();
     for ( int i = 0, limit = args.length - 1; i < limit; i++ ) {
       final String arg = args[i];

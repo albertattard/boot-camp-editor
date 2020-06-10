@@ -32,6 +32,6 @@ public class MetadataFileParserTest {
   public void shouldReturnEditorFile() {
     final MetadataFile subject = SampleHelper.readMetadataFile( "guest-file.json" );
     final EditorFile file = subject.readEditorFile();
-    assertEquals( 7, file.numberOfLines() );
+    assertEquals( 7, file.stream().count() );
   }
 }

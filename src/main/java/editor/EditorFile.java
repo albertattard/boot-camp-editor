@@ -19,20 +19,8 @@ public class EditorFile {
     this.lines = Collections.unmodifiableList( new ArrayList<>( lines ) );
   }
 
-  public int numberOfLines() {
-    return lines.size();
-  }
-
-  public List<HeaderLine> headers() {
-    return lines.stream()
-      .filter( line -> line instanceof HeaderLine )
-      .map( line -> (HeaderLine) line )
-      .collect( Collectors.toList() );
-  }
-
   public EditorFile resolve( final Context context ) {
-    final List<Line> resolved = lines
-      .stream()
+    final List<Line> resolved = stream()
       .flatMap( line -> line.resolve( context ) )
       .collect( Collectors.toList() );
     return new EditorFile( resolved );
@@ -47,6 +35,12 @@ public class EditorFile {
     } catch ( final IOException e ) {
       throw new RuntimeException( "Failed to flush the writer", e );
     }
+  }
+
+  public boolean containsType( final Class<?> type ) {
+    return stream()
+      .map( Line::getClass )
+      .anyMatch( type::isAssignableFrom );
   }
 
   public static EditorFile empty() {
