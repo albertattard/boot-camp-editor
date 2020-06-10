@@ -4,9 +4,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.collectingAndThen;
 
 public class Scanner {
 
@@ -16,7 +24,26 @@ public class Scanner {
         .flatMap( Scanner::walk )
         .filter( Scanner::filter )
         .map( MetadataFileParser::parse )
-        .collect( Collectors.toMap( MetadataFile::getName, a -> a ) );
+        .collect( collectingAndThen( collectInTreeMap(), Collections::unmodifiableMap ) );
+  }
+
+  private static Collector<MetadataFile, ?, TreeMap<String, MetadataFile>> collectInTreeMap() {
+    return Collectors.toMap(
+      MetadataFile::getName,
+      Function.identity(),
+      handleCollisions(),
+      createTreeMap()
+    );
+  }
+
+  private static Supplier<TreeMap<String, MetadataFile>> createTreeMap() {
+    return () -> new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+  }
+
+  private static BinaryOperator<MetadataFile> handleCollisions() {
+    return ( a, b ) -> {
+      throw new IllegalArgumentException( String.format( "Duplicate name found with name: %s", a.getName() ) );
+    };
   }
 
   private static Stream<Path> walk( final Path path ) {

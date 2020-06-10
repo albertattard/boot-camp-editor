@@ -7,9 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Project {
 
@@ -49,8 +47,7 @@ public class Project {
     Preconditions.checkNotNull( charset, "Charset is not set" );
     Preconditions.checkArgument( !directories.isEmpty(), "No directories were added to scan" );
 
-    Context context = Context.scan( directories )
-      .entryPoint( entryPoint );
+    Context context = Context.of( entryPoint, directories );
 
     while ( context.containsType( NeedsToBeResolved.class ) ) {
       context = context.resolve();

@@ -2,10 +2,8 @@ package editor;
 
 import com.google.common.base.Preconditions;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,16 +17,10 @@ public class Context {
   private final Map<String, MetadataFile> metadataByName;
   private final EditorFile file;
 
-  public static Context scan( final Collection<Path> directories ) {
-    final Map<String, MetadataFile> metadataByName = Scanner.scan( directories );
-    return new Context( EditorFile.empty(), metadataByName );
-  }
-
-  public Context entryPoint( final String entryPoint ) {
-    final EditorFile file = findMetadata( entryPoint )
-      .orElseThrow( () -> new RuntimeException( String.format( "Entry point '%s' was not found", entryPoint ) ) )
-      .readEditorFile();
-    return new Context( file, metadataByName );
+  public static Context of( final String entryPoint, final Collection<Path> directories ) {
+    final Map<String, MetadataFile> scanned = Scanner.scan( directories );
+    final EditorFile file = entryPoint( entryPoint, scanned );
+    return new Context( file, scanned );
   }
 
   public Optional<MetadataFile> findMetadata( final String name ) {
@@ -45,11 +37,6 @@ public class Context {
     return Collections.unmodifiableMap( map );
   }
 
-  @Override
-  public String toString() {
-    return String.format( "Context{metadataByName=%s}", metadataByName );
-  }
-
   public Context resolve() {
     return new Context( file.resolve( this ), metadataByName );
   }
@@ -62,13 +49,24 @@ public class Context {
     file.writeTo( output, charset );
   }
 
-
   private Context( final EditorFile file, final Map<String, MetadataFile> metadataByName ) {
     Preconditions.checkNotNull( file );
     Preconditions.checkNotNull( metadataByName );
 
     this.file = file;
     this.metadataByName = createMapWith( metadataByName );
+  }
+
+  private static EditorFile entryPoint( final String entryPoint, final Map<String, MetadataFile> metadataByName ) {
+    return Optional
+      .ofNullable( metadataByName.get( entryPoint ) )
+      .orElseThrow( () -> new IllegalArgumentException( String.format( "Entry point '%s' was not found", entryPoint ) ) )
+      .readEditorFile();
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Context{metadataByName=%s}", metadataByName );
   }
 
 }
