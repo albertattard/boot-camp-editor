@@ -10,4 +10,14 @@ public interface Line {
   void writeTo( final Writer writer );
 
   Line indentBy( final int indentation ) throws UnsupportedOperationException;
+
+  static int calculateIndentation( final String text ) {
+    for ( int i = 0, size = text.length(); i < size; i++ ) {
+      if ( !Character.isWhitespace( text.charAt( i ) ) ) {
+        return i;
+      }
+    }
+
+    return text.length();
+  }
 }

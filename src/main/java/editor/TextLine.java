@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import static editor.Line.calculateIndentation;
+
 @Getter
 @EqualsAndHashCode
 public class TextLine implements Line {
@@ -52,16 +54,6 @@ public class TextLine implements Line {
     final char[] padding = new char[indentation];
     Arrays.fill( padding, ' ' );
     return String.format( "%s%s", new String( padding ), text );
-  }
-
-  private static int calculateIndentation( final String text ) {
-    for ( int i = 0, size = text.length(); i < size; i++ ) {
-      if ( !Character.isWhitespace( text.charAt( i ) ) ) {
-        return i;
-      }
-    }
-
-    return text.length();
   }
 
   @Override

@@ -4,17 +4,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Writer;
 import java.util.stream.Stream;
+
+import static editor.Line.calculateIndentation;
 
 @Getter
 @EqualsAndHashCode( callSuper = true )
-public class IncludeCommandLine extends TextLine implements NeedsToBeResolved {
+public class IncludeCommandLine extends CommandLine {
 
   private final String include;
   private final int headerOffset;
 
-  private IncludeCommandLine( final String text, final String include, final int headerOffset ) {
-    super( text );
+  private IncludeCommandLine( final int indentation, final String include, final int headerOffset ) {
+    super( indentation );
     this.include = include;
     this.headerOffset = headerOffset;
   }
@@ -30,6 +33,15 @@ public class IncludeCommandLine extends TextLine implements NeedsToBeResolved {
       .map( this::adjustHeader );
   }
 
+  @Override
+  public void writeTo( final Writer writer ) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override public Line indentBy( final int indentation ) throws UnsupportedOperationException {
+    return new IncludeCommandLine( this.indentation + indentation, include, headerOffset );
+  }
+
   private Line adjustHeader( final Line line ) {
     if ( headerOffset > 0 && line instanceof HeaderLine ) {
       final HeaderLine headerLine = (HeaderLine) line;
@@ -39,19 +51,16 @@ public class IncludeCommandLine extends TextLine implements NeedsToBeResolved {
     return line;
   }
 
-  @Override
-  public IncludeCommandLine copyFromIndentedText( final String indentedText ) {
-    return new IncludeCommandLine( indentedText, include, headerOffset );
-  }
-
   public static IncludeCommandLine of( final String text ) {
+    final int indentation = calculateIndentation( text );
+
     final String parametersAsSingleString = StringUtils.substringBetween( text, "(", ")" );
     final String[] parameters = parametersAsSingleString.split( "\\s*,\\s*" );
 
     final String include = readParameter( parameters, 0, null );
     final int headerOffset = Integer.parseInt( readParameter( parameters, 1, "0" ) );
 
-    return new IncludeCommandLine( text, include, headerOffset );
+    return new IncludeCommandLine( indentation, include, headerOffset );
   }
 
   private static String readParameter( final String[] parameters, int index, String defaultValue ) {
