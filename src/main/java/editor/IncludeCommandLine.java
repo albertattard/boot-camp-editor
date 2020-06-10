@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Getter
@@ -27,7 +26,17 @@ public class IncludeCommandLine extends TextLine {
       .readEditorFile()
       .resolve( context )
       .stream()
-      .map( line -> line.indentBy( getIndentation() ) );
+      .map( line -> line.indentBy( getIndentation() ) )
+      .map( this::adjustHeader );
+  }
+
+  private Line adjustHeader( final Line line ) {
+    if ( headerOffset > 0 && line instanceof HeaderLine ) {
+      final HeaderLine headerLine = (HeaderLine) line;
+      return headerLine.toLowerLevelBy( headerOffset );
+    }
+
+    return line;
   }
 
   @Override

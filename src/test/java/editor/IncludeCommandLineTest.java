@@ -30,7 +30,7 @@ public class IncludeCommandLineTest {
   @Test
   @DisplayName( "should include the proper dependency from the context" )
   public void shouldIncludeDependency() {
-    final List<TextLine> source = List.of(
+    final List<Line> source = List.of(
       new TextLine( "Some line 1" ),
       new TextLine( "Some line 2" )
     );
@@ -43,14 +43,13 @@ public class IncludeCommandLineTest {
 
     final IncludeCommandLine subject = IncludeCommandLine.of( "  {include(\"something\")}" );
     assertEquals( 2, subject.getIndentation() );
-    final List<Line> actual = subject.resolve( context )
-      .collect( Collectors.toList() );
 
-    final List<TextLine> expected =
-      source
-        .stream()
-        .map( line -> new TextLine( String.format( "  %s", line.text ) ) )
-        .collect( Collectors.toList() );
+    final List<Line> actual = subject.resolve( context ).collect( Collectors.toList() );
+
+    final List<Line> expected = List.of(
+      new TextLine( "  Some line 1" ),
+      new TextLine( "  Some line 2" )
+    );
 
     assertEquals( expected, actual );
 
@@ -59,9 +58,26 @@ public class IncludeCommandLineTest {
   }
 
   @Test
-  @DisplayName( "" )
-  public void should() {
+  @DisplayName( "should include the dependency and adjust the header accordingly" )
+  public void shouldAdjustHeader() {
+    final List<TextLine> source = List.of( HeaderLine.of( "# Header" ) );
 
+    final Context context = mock( Context.class );
+    final MetadataFile metadataFile = mock( MetadataFile.class );
+
+    when( context.findMetadata( eq( "something" ) ) ).thenReturn( Optional.of( metadataFile ) );
+    when( metadataFile.readEditorFile() ).thenReturn( new EditorFile( source ) );
+
+    final IncludeCommandLine subject = IncludeCommandLine.of( "{include(\"something\", 2)}" );
+    assertEquals( 2, subject.getHeaderOffset() );
+
+    final List<Line> actual = subject.resolve( context ).collect( Collectors.toList() );
+
+    final List<Line> expected = List.of( HeaderLine.of( "### Header" ) );
+
+    assertEquals( expected, actual );
+
+    verify( context, times( 1 ) ).findMetadata( "something" );
+    verify( metadataFile, times( 1 ) ).readEditorFile();
   }
-
 }
