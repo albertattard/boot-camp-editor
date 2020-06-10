@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 @Getter
 @EqualsAndHashCode( callSuper = true )
-public class IncludeCommandLine extends TextLine {
+public class IncludeCommandLine extends TextLine implements NeedsToBeResolved {
 
   private final String include;
   private final int headerOffset;

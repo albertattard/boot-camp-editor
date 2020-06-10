@@ -49,7 +49,13 @@ public class EditorFile {
     }
   }
 
+  public static EditorFile empty() {
+    return EMPTY;
+  }
+
   public Stream<Line> stream() {
     return lines.stream();
   }
+
+  private static final EditorFile EMPTY = new EditorFile( Collections.emptyList() );
 }

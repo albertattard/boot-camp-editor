@@ -7,7 +7,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Project {
 
@@ -47,13 +49,13 @@ public class Project {
     Preconditions.checkNotNull( charset, "Charset is not set" );
     Preconditions.checkArgument( !directories.isEmpty(), "No directories were added to scan" );
 
-    final Context context = Context.scan( directories );
-    final MetadataFile entryPointMetadata = context.findMetadata( entryPoint )
-      .orElseThrow( () -> new RuntimeException( String.format( "Entry point '%s' was not found", entryPoint ) ) );
+    Context context = Context.scan( directories )
+      .entryPoint( entryPoint );
 
-    entryPointMetadata
-      .readEditorFile()
-      .resolve( context )
-      .writeTo( output, charset );
+    while ( context.containsType( NeedsToBeResolved.class ) ) {
+      context = context.resolve();
+    }
+
+    context.writeTo( output, charset );
   }
 }

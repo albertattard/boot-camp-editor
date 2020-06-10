@@ -18,7 +18,7 @@ public class IncludeCommandLineParser implements LineParser<IncludeCommandLine> 
     return INSTANCE;
   }
 
-  private static final Pattern PATTERN = Pattern.compile( "\\s*\\{include\\(\".+\"(|\\s*,\\s*\\d+)\\)\\}\\s*" );
+  private static final Pattern PATTERN = Pattern.compile( "\\s*\\{include\\(\".+\"(|\\s*,\\s*\\d+)\\)}\\s*" );
 
   private static final IncludeCommandLineParser INSTANCE = new IncludeCommandLineParser();
 
